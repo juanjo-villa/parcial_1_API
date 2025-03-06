@@ -12,44 +12,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.parcial_1.Service.CourseService;
 import com.example.parcial_1.models.Course;
-import com.example.parcial_1.repository.CourseRepository;
 
 @RestController
 @RequestMapping("/courses")
 public class CourseController {
 
     @Autowired
-    private CourseRepository courseRepository;
+    private CourseService courseService;
 
     @GetMapping
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseService.getAllCourses();
     }
 
     @GetMapping("/{id}")
     public Course getCourseById(@PathVariable Long id) {
-        return courseRepository.findById(id).orElse(null);
+        return courseService.getCourseById(id);
     }
 
     @PostMapping
     public Course createCourse(@RequestBody Course course) {
-        return courseRepository.save(course);
+        return courseService.createCourse(course);
     }
 
     @PutMapping("/{id}")
-    public Course updateCourse(@PathVariable Long id, @RequestBody Course courseDetails) {
-        Course course = courseRepository.findById(id).orElse(null);
-        if (course != null) {
-            course.setName(courseDetails.getName());
-            course.setProfessor(courseDetails.getProfessor());
-            return courseRepository.save(course);
-        }
-        return null;
+    public Course updateCourse(@PathVariable Long id, @RequestBody Course course) {
+        return courseService.updateCourse(id, course);
     }
 
     @DeleteMapping("/{id}")
     public void deleteCourse(@PathVariable Long id) {
-        courseRepository.deleteById(id);
+        courseService.deleteCourse(id);
     }
 }

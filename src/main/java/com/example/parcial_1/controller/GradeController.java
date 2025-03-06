@@ -12,45 +12,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.parcial_1.Service.GradeService;
 import com.example.parcial_1.models.Grade;
-import com.example.parcial_1.repository.GradeRepository;
 
 @RestController
 @RequestMapping("/grades")
 public class GradeController {
 
     @Autowired
-    private GradeRepository gradeRepository;
+    private GradeService gradeService;
 
     @GetMapping
     public List<Grade> getAllGrades() {
-        return gradeRepository.findAll();
+        return gradeService.getAllGrades();
     }
 
     @GetMapping("/{id}")
     public Grade getGradeById(@PathVariable Long id) {
-        return gradeRepository.findById(id).orElse(null);
+        return gradeService.getGradeById(id);
     }
 
     @PostMapping
     public Grade createGrade(@RequestBody Grade grade) {
-        return gradeRepository.save(grade);
+        return gradeService.createGrade(grade);
     }
 
     @PutMapping("/{id}")
-    public Grade updateGrade(@PathVariable Long id, @RequestBody Grade gradeDetails) {
-        Grade grade = gradeRepository.findById(id).orElse(null);
-        if (grade != null) {
-            grade.setScore(gradeDetails.getScore());
-            grade.setStudent(gradeDetails.getStudent());
-            grade.setCourse(gradeDetails.getCourse());
-            return gradeRepository.save(grade);
-        }
-        return null;
+    public Grade updateGrade(@PathVariable Long id, @RequestBody Grade grade) {
+        return gradeService.updateGrade(id, grade);
     }
 
     @DeleteMapping("/{id}")
     public void deleteGrade(@PathVariable Long id) {
-        gradeRepository.deleteById(id);
+        gradeService.deleteGrade(id);
     }
 }

@@ -12,44 +12,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.parcial_1.Service.EnrollmentService;
 import com.example.parcial_1.models.Enrollment;
-import com.example.parcial_1.repository.EnrollmentRepository;
 
 @RestController
 @RequestMapping("/enrollments")
 public class EnrollmentController {
 
     @Autowired
-    private EnrollmentRepository enrollmentRepository;
+    private EnrollmentService enrollmentService;
 
     @GetMapping
     public List<Enrollment> getAllEnrollments() {
-        return enrollmentRepository.findAll();
+        return enrollmentService.getAllEnrollments();
     }
 
     @GetMapping("/{id}")
     public Enrollment getEnrollmentById(@PathVariable Long id) {
-        return enrollmentRepository.findById(id).orElse(null);
+        return enrollmentService.getEnrollmentById(id);
     }
 
     @PostMapping
     public Enrollment createEnrollment(@RequestBody Enrollment enrollment) {
-        return enrollmentRepository.save(enrollment);
+        return enrollmentService.createEnrollment(enrollment);
     }
 
     @PutMapping("/{id}")
-    public Enrollment updateEnrollment(@PathVariable Long id, @RequestBody Enrollment enrollmentDetails) {
-        Enrollment enrollment = enrollmentRepository.findById(id).orElse(null);
-        if (enrollment != null) {
-            enrollment.setStudent(enrollmentDetails.getStudent());
-            enrollment.setCourse(enrollmentDetails.getCourse());
-            return enrollmentRepository.save(enrollment);
-        }
-        return null;
+    public Enrollment updateEnrollment(@PathVariable Long id, @RequestBody Enrollment enrollment) {
+        return enrollmentService.updateEnrollment(id, enrollment);
     }
 
     @DeleteMapping("/{id}")
     public void deleteEnrollment(@PathVariable Long id) {
-        enrollmentRepository.deleteById(id);
+        enrollmentService.deleteEnrollment(id);
     }
 }

@@ -12,44 +12,38 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.parcial_1.Service.ProfessorService;
 import com.example.parcial_1.models.Professor;
-import com.example.parcial_1.repository.ProfessorRepository;
 
 @RestController
 @RequestMapping("/professors")
 public class ProfessorController {
 
     @Autowired
-    private ProfessorRepository professorRepository;
+    private ProfessorService professorService;
 
     @GetMapping
     public List<Professor> getAllProfessors() {
-        return professorRepository.findAll();
+        return professorService.getAllProfessors();
     }
 
     @GetMapping("/{id}")
     public Professor getProfessorById(@PathVariable Long id) {
-        return professorRepository.findById(id).orElse(null);
+        return professorService.getProfessorById(id);
     }
 
     @PostMapping
     public Professor createProfessor(@RequestBody Professor professor) {
-        return professorRepository.save(professor);
+        return professorService.createProfessor(professor);
     }
 
     @PutMapping("/{id}")
-    public Professor updateProfessor(@PathVariable Long id, @RequestBody Professor professorDetails) {
-        Professor professor = professorRepository.findById(id).orElse(null);
-        if (professor != null) {
-            professor.setFirstName(professorDetails.getFirstName());
-            professor.setLastName(professorDetails.getLastName());
-            return professorRepository.save(professor);
-        }
-        return null;
+    public Professor updateProfessor(@PathVariable Long id, @RequestBody Professor professor) {
+        return professorService.updateProfessor(id, professor);
     }
 
     @DeleteMapping("/{id}")
     public void deleteProfessor(@PathVariable Long id) {
-        professorRepository.deleteById(id);
+        professorService.deleteProfessor(id);
     }
 }
